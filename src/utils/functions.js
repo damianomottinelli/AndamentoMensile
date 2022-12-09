@@ -1,10 +1,10 @@
-const getPercentage = (value, max) => {
+const getPercentage = (value, max = 1) => {
     return Math.round((value * 100) / max);
 };
 
-const getMonthName = (locale = 'default', index = 0) => {
+const getMonthName = (index = 0, locale = 'default') => {
     let date = new Date();
-    date.setDate(1); // Fix for the 31st day for months that don't have it
+    date.setDate(1); // Fix per mesi senza 31 giorni
     date.setMonth(index);
     return date.toLocaleString(locale, { month: 'long' });
 };

@@ -1,6 +1,7 @@
 import React from "react";
+import PropTypes from 'prop-types';
 
-const Mese = ({nome, documenti, importo, percentuale, isSelected, onSelect}) => {
+const Mese = ({nome, documenti, importo, percentuale, isSelected = false, onSelect = () => {}, ...props}) => {
     const style = {
         container: {
             display: 'flex', 
@@ -24,7 +25,7 @@ const Mese = ({nome, documenti, importo, percentuale, isSelected, onSelect}) => 
             width: '100%', 
             height: '100%', 
             background: 'linear-gradient(to top, #E0F1EB ' + (percentuale ?? 0) + '%, white 0%)',
-            borderBottom: isSelected ? '5px solid #00875A' : '2px solid #C6E7F5',
+            borderBottom: isSelected ? '5px solid #00875A' : '',
             marginBottom: isSelected ? '-5px' : '',
             position: 'relative'
         },
@@ -40,7 +41,7 @@ const Mese = ({nome, documenti, importo, percentuale, isSelected, onSelect}) => 
     };
 
     return (
-        <div style={style.container} onClick={onSelect}>
+        <div style={style.container} onClick={onSelect} {...props}>
             <div style={style.title}>
                 {nome ?? ''}
             </div>
@@ -54,3 +55,15 @@ const Mese = ({nome, documenti, importo, percentuale, isSelected, onSelect}) => 
 }
 
 export default Mese;
+
+Mese.propTypes = {
+    nome: PropTypes.string,
+    documenti: PropTypes.number,
+    importo: PropTypes.string,
+    percentuale: PropTypes.number,
+    isSelected: PropTypes.bool,
+    onSelect: PropTypes.func,
+    onMouseDown: PropTypes.func,
+    onMouseOver: PropTypes.func,
+    onMouseUp: PropTypes.func
+}

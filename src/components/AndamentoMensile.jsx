@@ -16,27 +16,28 @@ const AndamentoMensile = () => {
     });    
   }, [])
 
-  useEffect(() => {
-    console.log(selected);
-  }, [selected])
-
-  const addSelection = (...items) => {
+  const addSelection = (items) => {
     setSelected(items);
+  };
+
+  const isSelected = (index) => {
+      return (selected && selected instanceof Array) ? selected.some((elem) => elem.index === index) : false;
   };
 
   return <>
     {mesi ?
-        <Andamento mesi={mesi} selected={selected} onSelect={addSelection} />
-        : <></>
+        <Andamento mesi={mesi} isSelected={isSelected} onSelect={addSelection} />
+        : null
     }
     {(selected && selected instanceof Array) ? 
         selected.map((sel) => 
-          <>
+          <div key={sel.index}>
             <br/>Posizione: {sel.index}
             <br/>Nome: {sel.nome}
-          </>
+            <br/>importo: {sel.importo?.toLocaleString()} €
+          </div>
         )
-        : <></>
+        : null
     }
   </>;
 }
