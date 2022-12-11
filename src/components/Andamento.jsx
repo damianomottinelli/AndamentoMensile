@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Mese from './Mese';
@@ -16,30 +16,37 @@ const Andamento = ({mesi, isSelected = () => {}, onSelect = () => {}}) => {
         onSelect( [ getItem(list, index) ] );
     };
 
-    let selection = []; // Lista temporanea per consentire la multiselezione
+    let [selection, setSelection] = useState([]); // Lista temporanea per consentire la multiselezione
+
+    const isInSelection = (index) => {
+        return (selection && selection instanceof Array) ? selection.some((elem) => elem.index === index) : false;
+    };
     
     const onMouseDown = (event, list, index) => {
         event.preventDefault(); // Previene la selezione del testo
         
-        selection = []; // Svuoto la selezione temporanea
+        setSelection([]); // Svuoto la selezione temporanea
+        let temp = [...selection];
 
         if (!selection.some((elem) => elem.index === index)) { // Controllo che non sia già selezionato
-            selection.push(getItem(list, index));
+            temp.push(getItem(list, index));
+            setSelection(temp);
         }
     };
 
-    const onMouseOver = (event, list, index) => {
-        event.preventDefault();
-
-        if (!selection.some((elem) => elem.index === index)) { // Controllo che non sia già selezionato
-            selection.push(getItem(list, index));
+    const onMouseOver = (list, index) => {
+        if (selection && selection.length > 0) { // Aggiungo alla selezione temporanea solo se non è vuota (se ho iniziato a selezionare)
+            let temp = [...selection];
+            if (!selection.some((elem) => elem.index === index)) { // Controllo che non sia già selezionato
+                temp.push(getItem(list, index));
+                setSelection(temp);
+            }
         }
     };
 
-    const onMouseUp = (event) => {
-        event.preventDefault();
-
+    const onMouseUp = () => {
         onSelect(selection); // Aggiorno la selezione nello state padre
+        setSelection([]); // Svuoto la selezione temporanea
     };
 
     const style = {
@@ -58,9 +65,10 @@ const Andamento = ({mesi, isSelected = () => {}, onSelect = () => {}}) => {
                     importo={mese.importo?.toLocaleString()}
                     percentuale={getPercentage(mese.importo, max)}
                     isSelected={isSelected(idx)}
+                    inSelection={isInSelection(idx)}
                     onSelect={() => selectItem(mesi, idx)}
                     onMouseDown={(event) => onMouseDown(event, mesi, idx)}
-                    onMouseOver={(event) => onMouseOver(event, mesi, idx)}
+                    onMouseOver={() => onMouseOver(mesi, idx)}
                     onMouseUp={onMouseUp}
                 />
             ) : null

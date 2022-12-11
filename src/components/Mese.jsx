@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from 'prop-types';
 
-const Mese = ({nome, documenti, importo, percentuale, isSelected = false, onSelect = () => {}, ...props}) => {
+const Mese = ({nome, documenti, importo, percentuale, isSelected = false, inSelection = false, onSelect = () => {}, ...props}) => {
     const style = {
         container: {
             display: 'flex', 
@@ -25,8 +25,8 @@ const Mese = ({nome, documenti, importo, percentuale, isSelected = false, onSele
             width: '100%', 
             height: '100%', 
             background: 'linear-gradient(to top, #E0F1EB ' + (percentuale ?? 0) + '%, white 0%)',
-            borderBottom: isSelected ? '5px solid #00875A' : '',
-            marginBottom: isSelected ? '-5px' : '',
+            borderBottom: inSelection ? '5px solid #29FF61' : (isSelected ? '5px solid #00875A' : ''),
+            marginBottom: (isSelected || inSelection) ? '-5px' : '',
             position: 'relative'
         },
         docs: {
@@ -62,6 +62,7 @@ Mese.propTypes = {
     importo: PropTypes.string,
     percentuale: PropTypes.number,
     isSelected: PropTypes.bool,
+    inSelection: PropTypes.bool,
     onSelect: PropTypes.func,
     onMouseDown: PropTypes.func,
     onMouseOver: PropTypes.func,

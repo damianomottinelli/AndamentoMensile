@@ -16,17 +16,13 @@ const AndamentoMensile = () => {
     });    
   }, [])
 
-  const addSelection = (items) => {
-    setSelected(items);
-  };
-
   const isSelected = (index) => {
       return (selected && selected instanceof Array) ? selected.some((elem) => elem.index === index) : false;
   };
 
   return <>
     {mesi ?
-        <Andamento mesi={mesi} isSelected={isSelected} onSelect={addSelection} />
+        <Andamento mesi={mesi} isSelected={isSelected} onSelect={setSelected} />
         : null
     }
     {(selected && selected instanceof Array) ? 
